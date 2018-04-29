@@ -84,7 +84,7 @@ const updatePaddlePosition = (canvas, event) => {
 
   // adjust to canvas x
   paddle.position.x =
-    event.clientX - rect.left - docRoot.scrollLeft;
+    event.clientX - rect.left - docRoot.scrollLeft - paddle.width / 2;
 };
 
 const updateAll = (canvas) => {
