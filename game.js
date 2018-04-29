@@ -67,7 +67,7 @@ const updateBall = (canvasWidth, canvasHeight) => {
   }
 
   if (ball.position.y > canvasHeight) {
-    ball.velocity.y *= -1;
+    initBall(canvasWidth, canvasHeight);
   } else if (ball.position.y < 0) {
     ball.velocity.y *= -1;
   }
