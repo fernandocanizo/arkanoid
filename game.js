@@ -12,7 +12,7 @@ const ball = {
   },
   velocity: {
     x: 5,
-    y: 5,
+    y: 2,
   },
   color: 'white',
 };
@@ -23,6 +23,8 @@ const drawBackground = (canvas, context) => {
 };
 
 const updateBall = () => {
+  ball.position.x += ball.velocity.x;
+  ball.position.y += ball.velocity.y;
 };
 
 const drawBall = (canvas, context) => {
