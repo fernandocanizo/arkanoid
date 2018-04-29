@@ -17,14 +17,24 @@ const ball = {
   color: 'white',
 };
 
-const drawBackground = (canvas, context) => {
-  context.fillStyle = 'black';
-  context.fillRect(0, 0, canvas.width, canvas.height);
-};
-
+////////////////////////////////////////////////////////////////////////////////
+// Update
+////////////////////////////////////////////////////////////////////////////////
 const updateBall = () => {
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
+};
+
+const updateAll = () => {
+  updateBall();
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Draw
+////////////////////////////////////////////////////////////////////////////////
+const drawBackground = (canvas, context) => {
+  context.fillStyle = 'black';
+  context.fillRect(0, 0, canvas.width, canvas.height);
 };
 
 const drawBall = (canvas, context) => {
@@ -34,16 +44,14 @@ const drawBall = (canvas, context) => {
   context.fill();
 };
 
-const updateAll = () => {
-  updateBall();
-};
-
 const drawAll = (canvas, context) => {
   drawBackground(canvas, context);
   drawBall(canvas, context);
 };
 
-
+////////////////////////////////////////////////////////////////////////////////
+// Main
+////////////////////////////////////////////////////////////////////////////////
 window.onload = () => {
   const canvas = document.getElementById('playGround');
   const context = canvas.getContext('2d');
