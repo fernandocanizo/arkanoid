@@ -20,15 +20,15 @@ const ball = {
 ////////////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////////////
-const updateBall = (canvas, context) => {
+const updateBall = (canvasWidth, canvasHeight) => {
   // bounce back if out of canvas
-  if (ball.position.x > canvas.width) {
+  if (ball.position.x > canvasWidth) {
     ball.velocity.x *= -1;
   } else if (ball.position.x < 0) {
     ball.velocity.x *= -1;
   }
 
-  if (ball.position.y > canvas.height) {
+  if (ball.position.y > canvasHeight) {
     ball.velocity.y *= -1;
   } else if (ball.position.y < 0) {
     ball.velocity.y *= -1;
@@ -38,8 +38,8 @@ const updateBall = (canvas, context) => {
   ball.position.y += ball.velocity.y;
 };
 
-const updateAll = (canvas, context) => {
-  updateBall(canvas, context);
+const updateAll = (canvas) => {
+  updateBall(canvas.width, canvas.height);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
