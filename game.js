@@ -12,7 +12,7 @@ const ball = {
   },
   velocity: {
     x: 5,
-    y: 2,
+    y: 5,
   },
   color: 'white',
 };
@@ -20,13 +20,26 @@ const ball = {
 ////////////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////////////
-const updateBall = () => {
+const updateBall = (canvas, context) => {
+  // bounce back if out of canvas
+  if (ball.position.x > canvas.width) {
+    ball.velocity.x *= -1;
+  } else if (ball.position.x < 0) {
+    ball.velocity.x *= -1;
+  }
+
+  if (ball.position.y > canvas.height) {
+    ball.velocity.y *= -1;
+  } else if (ball.position.y < 0) {
+    ball.velocity.y *= -1;
+  }
+
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
 };
 
-const updateAll = () => {
-  updateBall();
+const updateAll = (canvas, context) => {
+  updateBall(canvas, context);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
