@@ -67,12 +67,12 @@ const updateAll = (canvas) => {
 ////////////////////////////////////////////////////////////////////////////////
 // Draw
 ////////////////////////////////////////////////////////////////////////////////
-const drawBackground = (canvas, context) => {
+const drawBackground = (context, canvasWidth, canvasHeight) => {
   context.fillStyle = 'black';
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillRect(0, 0, canvasWidth, canvasHeight);
 };
 
-const drawBall = (canvas, context) => {
+const drawBall = (context) => {
   context.fillStyle = ball.color;
   context.beginPath();
   context.arc(ball.position.x, ball.position.y, ball.radius, 0, Math.PI * 2);
@@ -80,8 +80,8 @@ const drawBall = (canvas, context) => {
 };
 
 const drawAll = (canvas, context) => {
-  drawBackground(canvas, context);
-  drawBall(canvas, context);
+  drawBackground(context, canvas.width, canvas.height);
+  drawBall(context);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
