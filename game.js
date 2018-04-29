@@ -18,6 +18,28 @@ const ball = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// Helpers
+////////////////////////////////////////////////////////////////////////////////
+const dice2 = () => Math.random() > 0.5 ? -1 : 1;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Initialize
+////////////////////////////////////////////////////////////////////////////////
+const initBall = (canvasWidth, canvasHeight) => {
+  const quarterX = canvasWidth / 4;
+  const quarterY = canvasHeight / 4;
+  const middleRectangleXsize = quarterX * 2;
+  const middleRectangleYsize = quarterY * 2;
+
+  ball.position.x = Math.floor(Math.random() * middleRectangleXsize + quarterX);
+  ball.position.y = Math.floor(Math.random() * middleRectangleYsize + quarterY);
+
+  ball.velocity.x = Math.floor(Math.random() * 10 + 3) * dice2();
+  ball.velocity.y = Math.floor(Math.random() * 10 + 3) * dice2();
+};
+
+////////////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////////////
 const updateBall = (canvasWidth, canvasHeight) => {
@@ -68,6 +90,8 @@ const drawAll = (canvas, context) => {
 window.onload = () => {
   const canvas = document.getElementById('playGround');
   const context = canvas.getContext('2d');
+
+  initBall(canvas.width, canvas.height);
 
   const intervalId = setInterval(() => {
     updateAll(canvas, context);
