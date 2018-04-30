@@ -126,7 +126,7 @@ const drawBall = (context) => {
   context.fill();
 };
 
-const drawPaddle  = (context) => {
+const drawPaddle = (context) => {
   context.fillStyle = paddle.color;
   context.fillRect(paddle.position.x, paddle.position.y,
     paddle.width, paddle.thickness);
