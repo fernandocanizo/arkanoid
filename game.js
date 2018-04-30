@@ -72,6 +72,19 @@ const updateBall = (canvasWidth, canvasHeight) => {
     ball.velocity.y *= -1;
   }
 
+  // reflect ball if hits paddle
+  const paddleTopEdge = paddle.position.y;
+  const paddleLeftEdge = paddle.position.x;
+  const paddleRightEdge = paddle.position.x + paddle.width;
+  const paddleBottomEdge = canvasHeight;
+  if (ball.position.x > paddleLeftEdge &&
+    ball.position.x < paddleRightEdge &&
+    ball.position.y > paddleTopEdge &&
+    ball.position.y < paddleBottomEdge) {
+
+    ball.velocity.y *= -1;
+  }
+
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
 };
