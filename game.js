@@ -27,6 +27,13 @@ const paddle = {
   thickness: 10,
 };
 
+const mouse = {
+  position: {
+    x: 0,
+    y: 0,
+  },
+};
+
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
@@ -102,8 +109,10 @@ const updatePaddlePosition = (canvas, event) => {
   const docRoot = document.documentElement;
 
   // adjust to canvas x
-  paddle.position.x =
-    event.clientX - rect.left - docRoot.scrollLeft - paddle.width / 2;
+  mouse.position.x = event.clientX - rect.left - docRoot.scrollLeft;
+  mouse.position.y = event.clientY - rect.top - docRoot.scrollTop;
+  paddle.position.x = mouse.position.x - paddle.width / 2;
+
 };
 
 const updateAll = (canvas) => {
@@ -132,11 +141,17 @@ const drawPaddle = (context) => {
     paddle.width, paddle.thickness);
 };
 
+const drawMousePosition = (canvasWidth, context, mousePosition) => {
+  context.fillStyle = 'yellow';
+  context.fillText(`x: ${mousePosition.x}, y: ${mousePosition.y}`,
+    canvasWidth - 100, 10);
+};
 
 const drawAll = (canvas, context) => {
   drawBackground(context, canvas.width, canvas.height);
   drawBall(context);
   drawPaddle(context);
+  drawMousePosition(canvas.width, context, mouse.position);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
