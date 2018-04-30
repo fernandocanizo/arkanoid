@@ -83,6 +83,12 @@ const updateBall = (canvasWidth, canvasHeight) => {
     ball.position.y < paddleBottomEdge) {
 
     ball.velocity.y *= -1;
+
+    // aim based on where ball hits the paddle
+    const centerOfPaddleX = paddle.position.x + paddle.width / 2;
+    const ballDistanceFromPaddleCenterX =
+      ball.position.x - centerOfPaddleX;
+    ball.velocity.x = ballDistanceFromPaddleCenterX * 0.4;
   }
 
   ball.position.x += ball.velocity.x;
