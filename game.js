@@ -3,6 +3,8 @@
 /* global document */
 
 const FPS = 30;
+const BRICK_MAX_X = 10;
+const BRICK_MAX_Y = 5;
 
 const ball = {
   radius: 10,
@@ -34,6 +36,24 @@ const mouse = {
   },
 };
 
+const defaultBrick = {
+  width: 0,
+  height: 0,
+  gap: 0,
+};
+
+const position = {
+  x: 0,
+  y: 0,
+};
+
+const bricks = Array(BRICK_MAX_X * BRICK_MAX_Y)
+  .fill(true)
+  .map(() => Object.create({
+    position: Object.create(position),
+    color: 'blue',
+  }));
+
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
@@ -60,6 +80,24 @@ const initBall = (canvasWidth, canvasHeight) => {
 const initPaddle = (canvasWidth, canvasHeight) => {
   paddle.position.x = canvasWidth / 2 - paddle.width / 2;
   paddle.position.y = canvasHeight - paddle.thickness;
+};
+
+const initBricks = (canvasSize) => {
+  // Make all brick defaults dynamic by percentage
+  // Percentages crafted on a 800x600 canvas
+  defaultBrick.gap = Math.floor(canvasSize.width * 0.25 / 100);
+  defaultBrick.width = canvasSize.width / BRICK_MAX_X - defaultBrick.gap;
+  defaultBrick.height = canvasSize.height / 2 / BRICK_MAX_Y -
+    defaultBrick.gap;
+
+  bricks.forEach((b, i) => {
+    const xDisplacementMultiplier = i % BRICK_MAX_X;
+    const yDisplacementMultiplier = Math.floor(i / 10);
+    const xGap = defaultBrick.gap * xDisplacementMultiplier;
+    const yGap = defaultBrick.gap * yDisplacementMultiplier;
+    b.position.x = defaultBrick.width * xDisplacementMultiplier + xGap;
+    b.position.y = defaultBrick.height * yDisplacementMultiplier + yGap;
+  });
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -147,11 +185,21 @@ const drawMousePosition = (canvasWidth, context, mousePosition) => {
     canvasWidth - 100, 10);
 };
 
+const drawBricks = (context) => {
+  bricks.forEach(b => {
+    context.fillStyle = b.color;
+    context.fillRect(b.position.x, b.position.y,
+      defaultBrick.width, defaultBrick.height);
+  });
+};
+
+
 const drawAll = (canvas, context) => {
   drawBackground(context, canvas.width, canvas.height);
   drawBall(context);
   drawPaddle(context);
   drawMousePosition(canvas.width, context, mouse.position);
+  drawBricks(context);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +211,7 @@ window.onload = () => {
 
   initBall(canvas.width, canvas.height);
   initPaddle(canvas.width, canvas.height);
+  initBricks({ width: canvas.width, height: canvas.height });
 
   canvas.addEventListener('mousemove', (event) =>
     updatePaddlePosition(canvas, event));
