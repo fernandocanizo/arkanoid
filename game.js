@@ -59,7 +59,6 @@ const bricks = Array(BRICK_COLS * BRICK_ROWS)
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 const signSpinner = () => Math.random() > 0.5 ? -1 : 1;
-const boolSpinner = () => Math.random() > 0.5;
 
 ////////////////////////////////////////////////////////////////////////
 // Initialize
@@ -99,7 +98,7 @@ const initBricks = (canvasSize) => {
     const yGap = defaultBrick.gap * yDisplacementMultiplier;
     b.position.x = defaultBrick.width * xDisplacementMultiplier + xGap;
     b.position.y = defaultBrick.height * yDisplacementMultiplier + yGap;
-    b.visible = boolSpinner();
+    b.visible = true;
   });
 };
 
