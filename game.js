@@ -3,8 +3,8 @@
 /* global document */
 
 const FPS = 30;
-const BRICK_MAX_X = 10;
-const BRICK_MAX_Y = 5;
+const BRICK_COLS = 10;
+const BRICK_ROWS = 5;
 
 const ball = {
   radius: 10,
@@ -48,7 +48,7 @@ const position = {
   y: 0,
 };
 
-const bricks = Array(BRICK_MAX_X * BRICK_MAX_Y)
+const bricks = Array(BRICK_COLS * BRICK_ROWS)
   .fill(true)
   .map(() => Object.create({
     position: Object.create(position),
@@ -88,12 +88,12 @@ const initBricks = (canvasSize) => {
   // Make all brick defaults dynamic by percentage
   // Percentages crafted on a 800x600 canvas
   defaultBrick.gap = Math.floor(canvasSize.width * 0.25 / 100);
-  defaultBrick.width = canvasSize.width / BRICK_MAX_X - defaultBrick.gap;
-  defaultBrick.height = canvasSize.height / 2 / BRICK_MAX_Y -
+  defaultBrick.width = canvasSize.width / BRICK_COLS - defaultBrick.gap;
+  defaultBrick.height = canvasSize.height / 2 / BRICK_ROWS -
     defaultBrick.gap;
 
   bricks.forEach((b, i) => {
-    const xDisplacementMultiplier = i % BRICK_MAX_X;
+    const xDisplacementMultiplier = i % BRICK_COLS;
     const yDisplacementMultiplier = Math.floor(i / 10);
     const xGap = defaultBrick.gap * xDisplacementMultiplier;
     const yGap = defaultBrick.gap * yDisplacementMultiplier;
