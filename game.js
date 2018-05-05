@@ -57,7 +57,7 @@ const bricks = Array(BRICK_MAX_X * BRICK_MAX_Y)
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
-const dice2 = () => Math.random() > 0.5 ? -1 : 1;
+const signSpinner = () => Math.random() > 0.5 ? -1 : 1;
 
 ////////////////////////////////////////////////////////////////////////
 // Initialize
@@ -73,8 +73,8 @@ const initBall = (canvasWidth, canvasHeight) => {
   ball.position.y = Math.floor(
     Math.random() * middleRectangleYsize + quarterY);
 
-  ball.velocity.x = Math.floor(Math.random() * 10 + 3) * dice2();
-  ball.velocity.y = Math.floor(Math.random() * 10 + 3) * dice2();
+  ball.velocity.x = Math.floor(Math.random() * 10 + 3) * signSpinner();
+  ball.velocity.y = Math.floor(Math.random() * 10 + 3) * signSpinner();
 };
 
 const initPaddle = (canvasWidth, canvasHeight) => {
