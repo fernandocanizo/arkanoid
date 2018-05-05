@@ -88,16 +88,19 @@ const initBricks = (canvasSize) => {
   // Percentages crafted on a 800x600 canvas
   defaultBrick.gap = Math.floor(canvasSize.width * 0.25 / 100);
   defaultBrick.width = canvasSize.width / BRICK_COLS - defaultBrick.gap;
+  // don't put bricks below half screen
   defaultBrick.height = canvasSize.height / 2 / BRICK_ROWS -
     defaultBrick.gap;
 
+  const currentRow = (brickIndex) => Math.floor(brickIndex / 2 / BRICK_ROWS);
+
   bricks.forEach((b, i) => {
-    const xDisplacementMultiplier = i % BRICK_COLS;
-    const yDisplacementMultiplier = Math.floor(i / 10);
-    const xGap = defaultBrick.gap * xDisplacementMultiplier;
-    const yGap = defaultBrick.gap * yDisplacementMultiplier;
-    b.position.x = defaultBrick.width * xDisplacementMultiplier + xGap;
-    b.position.y = defaultBrick.height * yDisplacementMultiplier + yGap;
+    const col = i % BRICK_COLS;
+    const row = currentRow(i);
+    const xGap = defaultBrick.gap * col;
+    const yGap = defaultBrick.gap * row;
+    b.position.x = defaultBrick.width * col + xGap;
+    b.position.y = defaultBrick.height * row + yGap;
     b.visible = true;
   });
 };
