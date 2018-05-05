@@ -122,12 +122,22 @@ const updateBall = (canvasWidth, canvasHeight) => {
     ball.velocity.y *= -1;
   }
 
-  // reflect ball if hits paddle
+  // calculate ball row, col for ball-brick collision detection
+  const ballCol = Math.floor(ball.position.x / (defaultBrick.width + defaultBrick.gap));
+  const ballRow = Math.floor(ball.position.y / (defaultBrick.height + defaultBrick.gap));
+  const brickArrayIndex = ballRow * BRICK_COLS + ballCol;
+
+  // reflect ball if hits paddle (ball-paddle collision detection)
   const paddleTopEdge = paddle.position.y;
   const paddleLeftEdge = paddle.position.x;
   const paddleRightEdge = paddle.position.x + paddle.width;
   const paddleBottomEdge = canvasHeight;
-  if (ball.position.x > paddleLeftEdge &&
+
+  // if/else because either we're near bricks or near paddle, but not both
+  if (brickArrayIndex >= 0 && brickArrayIndex < BRICK_COLS * BRICK_ROWS) {
+    bricks[ballRow * BRICK_COLS + ballCol].visible = false;
+
+  } else if (ball.position.x > paddleLeftEdge &&
     ball.position.x < paddleRightEdge &&
     ball.position.y > paddleTopEdge &&
     ball.position.y < paddleBottomEdge) {
