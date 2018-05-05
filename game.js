@@ -40,6 +40,7 @@ const defaultBrick = {
   width: 0,
   height: 0,
   gap: 0,
+  visible: true,
 };
 
 const position = {
@@ -58,6 +59,7 @@ const bricks = Array(BRICK_MAX_X * BRICK_MAX_Y)
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 const signSpinner = () => Math.random() > 0.5 ? -1 : 1;
+const boolSpinner = () => Math.random() > 0.5;
 
 ////////////////////////////////////////////////////////////////////////
 // Initialize
@@ -97,6 +99,7 @@ const initBricks = (canvasSize) => {
     const yGap = defaultBrick.gap * yDisplacementMultiplier;
     b.position.x = defaultBrick.width * xDisplacementMultiplier + xGap;
     b.position.y = defaultBrick.height * yDisplacementMultiplier + yGap;
+    b.visible = boolSpinner();
   });
 };
 
@@ -187,9 +190,11 @@ const drawMousePosition = (canvasWidth, context, mousePosition) => {
 
 const drawBricks = (context) => {
   bricks.forEach(b => {
-    context.fillStyle = b.color;
-    context.fillRect(b.position.x, b.position.y,
-      defaultBrick.width, defaultBrick.height);
+    if (b.visible) {
+      context.fillStyle = b.color;
+      context.fillRect(b.position.x, b.position.y,
+        defaultBrick.width, defaultBrick.height);
+    }
   });
 };
 
