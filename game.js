@@ -126,6 +126,10 @@ const updateBall = (canvasWidth, canvasHeight) => {
   const ballCol = Math.floor(ball.position.x / (defaultBrick.width + defaultBrick.gap));
   const ballRow = Math.floor(ball.position.y / (defaultBrick.height + defaultBrick.gap));
   const brickArrayIndex = ballRow * BRICK_COLS + ballCol;
+  const gotBricksLeft = brickArrayIndex >= 0;
+  const ballInsideBrickGrid = brickArrayIndex < BRICK_COLS * BRICK_ROWS &&
+    ballCol < BRICK_COLS && ballCol > -1 &&
+    ballRow < BRICK_ROWS && ballRow > -1;
 
   // reflect ball if hits paddle (ball-paddle collision detection)
   const paddleTopEdge = paddle.position.y;
@@ -134,8 +138,8 @@ const updateBall = (canvasWidth, canvasHeight) => {
   const paddleBottomEdge = canvasHeight;
 
   // if/else because either we're near bricks or near paddle, but not both
-  if (brickArrayIndex >= 0 && brickArrayIndex < BRICK_COLS * BRICK_ROWS) {
-    bricks[ballRow * BRICK_COLS + ballCol].visible = false;
+  if (gotBricksLeft && ballInsideBrickGrid) {
+    bricks[brickArrayIndex].visible = false;
 
   } else if (ball.position.x > paddleLeftEdge &&
     ball.position.x < paddleRightEdge &&
