@@ -138,9 +138,9 @@ const updateBall = (canvasWidth, canvasHeight) => {
   const paddleBottomEdge = canvasHeight;
 
   // if/else because either we're near bricks or near paddle, but not both
-  if (gotBricksLeft && ballInsideBrickGrid) {
+  if (gotBricksLeft && ballInsideBrickGrid && bricks[brickArrayIndex].visible) {
     bricks[brickArrayIndex].visible = false;
-
+    ball.velocity.y *= -1;
   } else if (ball.position.x > paddleLeftEdge &&
     ball.position.x < paddleRightEdge &&
     ball.position.y > paddleTopEdge &&
