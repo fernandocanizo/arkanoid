@@ -74,8 +74,8 @@ const initBall = (canvasWidth, canvasHeight) => {
   ball.position.y = Math.floor(
     Math.random() * middleRectangleYsize + quarterY);
 
-  ball.velocity.x = Math.floor(Math.random() * 10 + 3) * signSpinner();
-  ball.velocity.y = Math.floor(Math.random() * 10 + 3) * signSpinner();
+  ball.velocity.x = Math.floor(Math.random() * 10 + 7) * signSpinner();
+  ball.velocity.y = Math.floor(Math.random() * 10 + 7) * signSpinner();
 };
 
 const initPaddle = (canvasWidth, canvasHeight) => {
