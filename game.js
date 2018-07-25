@@ -108,7 +108,7 @@ const initBricks = (canvasSize) => {
 ////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////
-const updateBall = (canvasWidth, canvasHeight) => {
+const ballCanvasHandler = (canvasWidth, canvasHeight) => {
   // bounce back if out of canvas
   if (ball.position.x > canvasWidth) {
     ball.velocity.x *= -1;
@@ -121,7 +121,9 @@ const updateBall = (canvasWidth, canvasHeight) => {
   } else if (ball.position.y < 0) {
     ball.velocity.y *= -1;
   }
+};
 
+const ballPaddleBrickHandler = (canvasHeight) => {
   // calculate ball row, col for ball-brick collision detection
   const ballCol = Math.floor(ball.position.x / (defaultBrick.width + defaultBrick.gap));
   const ballRow = Math.floor(ball.position.y / (defaultBrick.height + defaultBrick.gap));
@@ -154,6 +156,11 @@ const updateBall = (canvasWidth, canvasHeight) => {
       ball.position.x - centerOfPaddleX;
     ball.velocity.x = ballDistanceFromPaddleCenterX * 0.4;
   }
+};
+
+const updateBall = (canvasWidth, canvasHeight) => {
+  ballCanvasHandler(canvasWidth, canvasHeight);
+  ballPaddleBrickHandler(canvasHeight);
 
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
