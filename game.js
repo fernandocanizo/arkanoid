@@ -192,6 +192,11 @@ const updatePaddlePosition = (canvas, event) => {
   mouse.position.y = event.clientY - rect.top - docRoot.scrollTop;
   paddle.position.x = mouse.position.x - paddle.width / 2;
 
+  if (paddle.position.x < rect.left) {
+    paddle.position.x = 0;
+  } else if (paddle.position.x + paddle.width > rect.left + canvas.width) {
+    paddle.position.x = canvas.width - paddle.width;
+  }
 };
 
 const updateAll = (canvas) => {
