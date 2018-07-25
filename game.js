@@ -59,6 +59,7 @@ const bricks = Array(BRICK_COLS * BRICK_ROWS)
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 const signSpinner = () => Math.random() > 0.5 ? -1 : 1;
+const flipBallVelocity = axis => ball.velocity[axis] *= -1;
 
 ////////////////////////////////////////////////////////////////////////
 // Initialize
@@ -110,16 +111,14 @@ const initBricks = (canvasSize) => {
 ////////////////////////////////////////////////////////////////////////
 const ballCanvasHandler = (canvasWidth, canvasHeight) => {
   // bounce back if out of canvas
-  if (ball.position.x > canvasWidth) {
-    ball.velocity.x *= -1;
-  } else if (ball.position.x < 0) {
-    ball.velocity.x *= -1;
+  if (ball.position.x > canvasWidth || ball.position.x < 0) {
+    flipBallVelocity('x');
   }
 
   if (ball.position.y > canvasHeight) {
     initBall(canvasWidth, canvasHeight);
   } else if (ball.position.y < 0) {
-    ball.velocity.y *= -1;
+    flipBallVelocity('y');
   }
 };
 
@@ -142,13 +141,29 @@ const ballPaddleBrickHandler = (canvasHeight) => {
   // if/else because either we're near bricks or near paddle, but not both
   if (gotBricksLeft && ballInsideBrickGrid && bricks[brickArrayIndex].visible) {
     bricks[brickArrayIndex].visible = false;
-    ball.velocity.y *= -1;
+
+    const prevBallPosition = {
+      x: ball.position.x - ball.velocity.x,
+      y: ball.position.y - ball.velocity.y,
+    };
+    const prevBallCol = Math.floor(prevBallPosition.x / (defaultBrick.width + defaultBrick.gap));
+    const prevBallRow = Math.floor(prevBallPosition.y / (defaultBrick.height + defaultBrick.gap));
+
+    if (prevBallCol != ballCol) {
+      // column has changed, ball comes from the side
+      flipBallVelocity('x');
+    }
+
+    if (prevBallRow != ballRow) {
+      // row has changed, ball comes brom above or below
+      flipBallVelocity('y');
+    }
   } else if (ball.position.x > paddleLeftEdge &&
     ball.position.x < paddleRightEdge &&
     ball.position.y > paddleTopEdge &&
     ball.position.y < paddleBottomEdge) {
 
-    ball.velocity.y *= -1;
+    flipBallVelocity('y');
 
     // aim based on where ball hits the paddle
     const centerOfPaddleX = paddle.position.x + paddle.width / 2;
