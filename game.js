@@ -6,6 +6,8 @@ const FPS = 30;
 const BRICK_COLS = 10;
 const BRICK_ROWS = 5;
 
+const game = {};
+
 const ball = {
   radius: 10,
   position: {
@@ -64,9 +66,9 @@ const flipBallVelocity = axis => ball.velocity[axis] *= -1;
 ////////////////////////////////////////////////////////////////////////
 // Initialize
 ////////////////////////////////////////////////////////////////////////
-const initBall = (canvasWidth, canvasHeight) => {
-  const quarterX = canvasWidth / 4;
-  const quarterY = canvasHeight / 4;
+const initBall = () => {
+  const quarterX = game.canvas.width / 4;
+  const quarterY = game.canvas.height / 4;
   const middleRectangleXsize = quarterX * 2;
   const middleRectangleYsize = quarterY * 2;
 
@@ -79,18 +81,18 @@ const initBall = (canvasWidth, canvasHeight) => {
   ball.velocity.y = Math.floor(Math.random() * 10 + 7) * signSpinner();
 };
 
-const initPaddle = (canvasWidth, canvasHeight) => {
-  paddle.position.x = canvasWidth / 2 - paddle.width / 2;
-  paddle.position.y = canvasHeight - paddle.thickness;
+const initPaddle = () => {
+  paddle.position.x = game.canvas.width / 2 - paddle.width / 2;
+  paddle.position.y = game.canvas.height - paddle.thickness;
 };
 
-const initBricks = (canvasSize) => {
+const initBricks = () => {
   // Make all brick defaults dynamic by percentage
   // Percentages crafted on a 800x600 canvas
-  defaultBrick.gap = Math.floor(canvasSize.width * 0.25 / 100);
-  defaultBrick.width = canvasSize.width / BRICK_COLS - defaultBrick.gap;
+  defaultBrick.gap = Math.floor(game.canvas.width * 0.25 / 100);
+  defaultBrick.width = game.canvas.width / BRICK_COLS - defaultBrick.gap;
   // don't put bricks below half screen
-  defaultBrick.height = canvasSize.height / 2 / BRICK_ROWS -
+  defaultBrick.height = game.canvas.height / 2 / BRICK_ROWS -
     defaultBrick.gap;
 
   const currentRow = (brickIndex) => Math.floor(brickIndex / 2 / BRICK_ROWS);
@@ -109,20 +111,20 @@ const initBricks = (canvasSize) => {
 ////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////
-const ballCanvasHandler = (canvasWidth, canvasHeight) => {
+const ballCanvasHandler = () => {
   // bounce back if out of canvas
-  if (ball.position.x > canvasWidth || ball.position.x < 0) {
+  if (ball.position.x > game.canvas.width || ball.position.x < 0) {
     flipBallVelocity('x');
   }
 
-  if (ball.position.y > canvasHeight) {
-    initBall(canvasWidth, canvasHeight);
+  if (ball.position.y > game.canvas.height) {
+    initBall();
   } else if (ball.position.y < 0) {
     flipBallVelocity('y');
   }
 };
 
-const ballPaddleBrickHandler = (canvasHeight) => {
+const ballPaddleBrickHandler = () => {
   // calculate ball row, col for ball-brick collision detection
   const ballCol = Math.floor(ball.position.x / (defaultBrick.width + defaultBrick.gap));
   const ballRow = Math.floor(ball.position.y / (defaultBrick.height + defaultBrick.gap));
@@ -136,7 +138,7 @@ const ballPaddleBrickHandler = (canvasHeight) => {
   const paddleTopEdge = paddle.position.y;
   const paddleLeftEdge = paddle.position.x;
   const paddleRightEdge = paddle.position.x + paddle.width;
-  const paddleBottomEdge = canvasHeight;
+  const paddleBottomEdge = game.canvas.height;
 
   // if/else because either we're near bricks or near paddle, but not both
   if (gotBricksLeft && ballInsideBrickGrid && bricks[brickArrayIndex].visible) {
@@ -189,18 +191,18 @@ const ballPaddleBrickHandler = (canvasHeight) => {
   }
 };
 
-const updateBall = (canvasWidth, canvasHeight) => {
-  ballCanvasHandler(canvasWidth, canvasHeight);
-  ballPaddleBrickHandler(canvasHeight);
+const updateBall = () => {
+  ballCanvasHandler(game.canvas.width, game.canvas.height);
+  ballPaddleBrickHandler();
 
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
 };
 
-const updatePaddlePosition = (canvas, event) => {
+const updatePaddlePosition = (event) => {
   // Note: this function is not tick-based, but event-based
 
-  const rect = canvas.getBoundingClientRect();
+  const rect = game.canvas.getBoundingClientRect();
   const docRoot = document.documentElement;
 
   // adjust to canvas x
@@ -210,78 +212,78 @@ const updatePaddlePosition = (canvas, event) => {
 
   if (paddle.position.x < rect.left) {
     paddle.position.x = 0;
-  } else if (paddle.position.x + paddle.width > rect.left + canvas.width) {
-    paddle.position.x = canvas.width - paddle.width;
+  } else if (paddle.position.x + paddle.width > rect.left + game.canvas.width) {
+    paddle.position.x = game.canvas.width - paddle.width;
   }
 };
 
-const updateAll = (canvas) => {
-  updateBall(canvas.width, canvas.height);
+const updateAll = () => {
+  updateBall();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Draw
 ////////////////////////////////////////////////////////////////////////////////
-const drawBackground = (context, canvasWidth, canvasHeight) => {
-  context.fillStyle = 'black';
-  context.fillRect(0, 0, canvasWidth, canvasHeight);
+const drawBackground = () => {
+  game.context.fillStyle = 'black';
+  game.context.fillRect(0, 0, game.canvas.width, game.canvas.height);
 };
 
-const drawBall = (context) => {
-  context.fillStyle = ball.color;
-  context.beginPath();
-  context.arc(ball.position.x, ball.position.y, ball.radius,
+const drawBall = () => {
+  game.context.fillStyle = ball.color;
+  game.context.beginPath();
+  game.context.arc(ball.position.x, ball.position.y, ball.radius,
     0, Math.PI * 2);
-  context.fill();
+  game.context.fill();
 };
 
-const drawPaddle = (context) => {
-  context.fillStyle = paddle.color;
-  context.fillRect(paddle.position.x, paddle.position.y,
+const drawPaddle = () => {
+  game.context.fillStyle = paddle.color;
+  game.context.fillRect(paddle.position.x, paddle.position.y,
     paddle.width, paddle.thickness);
 };
 
-const drawMousePosition = (canvasWidth, context, mousePosition) => {
-  context.fillStyle = 'yellow';
-  context.fillText(`x: ${mousePosition.x}, y: ${mousePosition.y}`,
-    canvasWidth - 100, 10);
+const drawMousePosition = (mousePosition) => {
+  game.context.fillStyle = 'yellow';
+  game.context.fillText(`x: ${mousePosition.x}, y: ${mousePosition.y}`,
+    game.canvas.width - 100, 10);
 };
 
-const drawBricks = (context) => {
+const drawBricks = () => {
   bricks.forEach(b => {
     if (b.visible) {
-      context.fillStyle = b.color;
-      context.fillRect(b.position.x, b.position.y,
+      game.context.fillStyle = b.color;
+      game.context.fillRect(b.position.x, b.position.y,
         defaultBrick.width, defaultBrick.height);
     }
   });
 };
 
 
-const drawAll = (canvas, context) => {
-  drawBackground(context, canvas.width, canvas.height);
-  drawBall(context);
-  drawPaddle(context);
-  drawMousePosition(canvas.width, context, mouse.position);
-  drawBricks(context);
+const drawAll = () => {
+  drawBackground();
+  drawBall();
+  drawPaddle();
+  drawMousePosition(mouse.position);
+  drawBricks();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////////////////////////////////////
 window.onload = () => {
-  const canvas = document.getElementById('playGround');
-  const context = canvas.getContext('2d');
+  game.canvas = document.getElementById('playGround');
+  game.context = game.canvas.getContext('2d');
 
-  initBall(canvas.width, canvas.height);
-  initPaddle(canvas.width, canvas.height);
-  initBricks({ width: canvas.width, height: canvas.height });
+  initBall();
+  initPaddle();
+  initBricks();
 
-  canvas.addEventListener('mousemove', event => updatePaddlePosition(canvas, event));
+  game.canvas.addEventListener('mousemove', event => updatePaddlePosition(event));
 
   const intervalId = setInterval(() => {
-    updateAll(canvas, context);
-    drawAll(canvas, context);
+    updateAll();
+    drawAll();
   }, 1000 / FPS);
   console.log('intervalId', intervalId);
 };
