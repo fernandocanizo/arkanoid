@@ -149,13 +149,29 @@ const ballPaddleBrickHandler = (canvasHeight) => {
     const prevBallCol = Math.floor(prevBallPosition.x / (defaultBrick.width + defaultBrick.gap));
     const prevBallRow = Math.floor(prevBallPosition.y / (defaultBrick.height + defaultBrick.gap));
 
+    let bothTestFailed = true;
     if (prevBallCol != ballCol) {
       // column has changed, ball comes from the side
-      flipBallVelocity('x');
+      const adjacentBrickIndex = ballRow * BRICK_COLS + prevBallCol;
+      if (! bricks[adjacentBrickIndex].visible) {
+        // bounce only if brick has no neighbor brick on the side ball came
+        flipBallVelocity('x');
+        bothTestFailed = false;
+      }
     }
 
     if (prevBallRow != ballRow) {
       // row has changed, ball comes brom above or below
+      const adjacentBrickIndex = prevBallRow * BRICK_COLS + ballCol;
+      if (! bricks[adjacentBrickIndex].visible) {
+        // bounce only if brick has no neighbor brick on the side ball came
+        flipBallVelocity('y');
+        bothTestFailed = false;
+      }
+    }
+
+    if (bothTestFailed) {
+      flipBallVelocity('x');
       flipBallVelocity('y');
     }
   } else if (ball.position.x > paddleLeftEdge &&
@@ -261,8 +277,7 @@ window.onload = () => {
   initPaddle(canvas.width, canvas.height);
   initBricks({ width: canvas.width, height: canvas.height });
 
-  canvas.addEventListener('mousemove', (event) =>
-    updatePaddlePosition(canvas, event));
+  canvas.addEventListener('mousemove', event => updatePaddlePosition(canvas, event));
 
   const intervalId = setInterval(() => {
     updateAll(canvas, context);
