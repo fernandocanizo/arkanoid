@@ -62,6 +62,8 @@ const bricks = Array(BRICK_COLS * BRICK_ROWS)
 ////////////////////////////////////////////////////////////////////////
 const signSpinner = () => Math.random() > 0.5 ? -1 : 1;
 const flipBallVelocity = axis => ball.velocity[axis] *= -1;
+const isVisible = brick => brick.visible;
+const areAllBricksDown = brickArray => ! brickArray.some(isVisible);
 
 ////////////////////////////////////////////////////////////////////////
 // Initialize
@@ -108,6 +110,8 @@ const initBricks = () => {
   });
 };
 
+const resetGame = () => (initBall(), initBricks());
+
 ////////////////////////////////////////////////////////////////////////
 // Update
 ////////////////////////////////////////////////////////////////////////
@@ -143,6 +147,9 @@ const ballPaddleBrickHandler = () => {
   // if/else because either we're near bricks or near paddle, but not both
   if (gotBricksLeft && ballInsideBrickGrid && bricks[brickArrayIndex].visible) {
     bricks[brickArrayIndex].visible = false;
+    if (areAllBricksDown(bricks)) {
+      resetGame();
+    }
 
     const prevBallPosition = {
       x: ball.position.x - ball.velocity.x,
