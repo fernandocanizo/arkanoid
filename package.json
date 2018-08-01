@@ -4,7 +4,28 @@
   "description": "Arkanoid remake",
   "main": "game.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prettyAndLinted": "npx lint-staged",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "prettier": {
+    "trailingComma": "all"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettyAndLinted",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "npx lynt",
+      "git add"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -19,5 +40,11 @@
   "bugs": {
     "url": "https://github.com/fernandocanizo/arkanoid/issues"
   },
-  "homepage": "https://github.com/fernandocanizo/arkanoid#readme"
+  "homepage": "https://github.com/fernandocanizo/arkanoid#readme",
+  "devDependencies": {
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.0",
+    "lynt": "^0.5.2",
+    "prettier": "1.14.0"
+  }
 }
