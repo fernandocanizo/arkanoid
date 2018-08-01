@@ -1,0 +1,23 @@
+{
+  "name": "arkanoid",
+  "version": "1.0.0",
+  "description": "Arkanoid remake",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fernandocanizo/arkanoid.git"
+  },
+  "keywords": [
+    "game",
+    "arkanoid"
+  ],
+  "author": "Fernando L. Canizo <fernandocanizo@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fernandocanizo/arkanoid/issues"
+  },
+  "homepage": "https://github.com/fernandocanizo/arkanoid#readme"
+}
